@@ -69,10 +69,11 @@ def out_of_sample(dataset, k, reg, fraction=C.HOLDOUT_FRACTION):
     except SingularNeighbourhood:
         return None
     y = embed_new(model, dataset.X[test])
+    # R² der zurückgehaltenen Touren: Residuen NICHT zentrieren (resid.var würde einen konstanten Versatz der Vorhersage verzeihen)
     beta, *_ = np.linalg.lstsq(_quad_features(model.embedding), dataset.z[train], rcond=None)
     z_test = dataset.z[test]
     resid = z_test - _quad_features(y) @ beta
-    return {"train": train, "test": test, "model": model, "y_test": y, "r2_test": float(1 - resid.var(0).sum() / z_test.var(0).sum()),
+    return {"train": train, "test": test, "model": model, "y_test": y, "r2_test": float(1 - (resid ** 2).sum() / ((z_test - z_test.mean(0)) ** 2).sum()),
             "r2_train": r2_quadratic(model.embedding[:, :2], dataset.z[train])}
 
 

@@ -13,7 +13,7 @@ Beides hat Preis und Nutzen, die die Demo live gegeneinander misst:
 ```
 pca-demo → isomap-demo   (global-geodätisch; Schwäche: Kurzschlüsse, kein Out-of-sample)
 pca-demo → lle-demo      (Kontrast zu Isomap, kein Fix: lokal-linear statt global-geodätisch; Schwäche: Regularisierung, Abstände, Rauschen; Stärke: Out-of-sample, Rechenzeit)
-pca-demo → t-SNE → UMAP → PaCMAP | Autoencoder   (weitere Äste, noch nicht gebaut)
+pca-demo → tsne-demo → umap-demo → pacmap-demo | autoencoder-demo   (weitere Äste)
 ```
 
 ## Was die Demo zeigt
