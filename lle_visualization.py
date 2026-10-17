@@ -2,11 +2,23 @@
 Eigenwertspektrum, Abstandstreue, k- und Regularisierungs-Sweep, Out-of-sample und Rechenzeit. Alle Figuren laufen durch `lock_axes`
 (Touch-Scrolling-Konvention des Portfolios: keine Zoom-/Pan-Gesten im Chart)."""
 
+import math
+
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 BLUE, ORANGE, GREEN, RED, GRAY = "#1f77b4", "#d68a2e", "#2ca02c", "#d62728", "#8a8f98"
+
+
+def _log_note(fig, text, position, axis, value, xref, yref):
+    """Beschriftung einer Referenzlinie in einem Unterdiagramm mit logarithmischer Achse: die Linie liegt auf dem Datenwert (add_hline/add_vline ohne Beschriftung),
+    die Beschriftung braucht log10 des Werts entlang der logarithmischen Achse (xref/yref: Achse des Unterdiagramms, "x domain" und "y domain" für die andere Richtung)."""
+    top, left = "top" in position, "left" in position
+    if axis == "y":
+        fig.add_annotation(xref=xref, yref=yref, x=0 if left else 1, y=math.log10(value), text=text, showarrow=False, xanchor="left" if left else "right", yanchor="bottom" if top else "top")
+    else:
+        fig.add_annotation(xref=xref, yref=yref, x=math.log10(value), y=1 if top else 0, text=text, showarrow=False, xanchor="right" if left else "left", yanchor="top" if top else "bottom")
 
 
 def lock_axes(fig):
@@ -101,7 +113,8 @@ def build_k_sweep(rows, current_k):
     fig.add_trace(go.Scatter(x=ks, y=[r["trust_lle"] for r in rows], mode="lines+markers", line=dict(color=GREEN, width=3), name="Trustworthiness"), row=1, col=2)
     for col in (1, 2):
         fig.add_vline(x=current_k, line_dash="dot", line_color=GRAY, row=1, col=col)
-    fig.add_vline(x=12.5, line_dash="dash", line_color="rgba(214,138,46,0.6)", annotation_text="k > d = 12", annotation_position="top left", row=1, col=1)
+    fig.add_vline(x=12.5, line_dash="dash", line_color="rgba(214,138,46,0.6)", row=1, col=1)
+    _log_note(fig, "k > d = 12", "top left", "x", 12.5, "x", "y domain")
     fig.update_xaxes(title_text="Nachbarn k", type="log", tickvals=[3, 5, 10, 14, 20, 45], ticktext=["3", "5", "10", "14", "20", "45"])
     fig.update_yaxes(range=[0, 1.02])
     fig.update_layout(template="plotly_white", height=340, margin=dict(l=10, r=10, t=40, b=10), legend=dict(orientation="h", y=-0.3))
