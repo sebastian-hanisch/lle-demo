@@ -61,7 +61,7 @@ n = 1000: **0.28 s gegen 1.7 s** (≈ 6×); PCA bleibt im Bereich 0.1–0.4 ms. 
 
 ## Was nicht funktioniert hat / Grenzen
 
-- **Die Standard-Regularisierung von sklearn (0.001) trägt hier nicht:** bei k > d = 12 landet das R² damit bei 0.66–0.72 – deshalb der Default 0.01 und die Regularisierung als eigener Regler.
+- **Die Standard-Regularisierung von sklearn (0.001) reicht hier nicht:** bei k > d = 12 landet das R² damit bei 0.66–0.72 – deshalb der Default 0.01 und die Regularisierung als eigener Regler.
 - **Kein Fenster wie bei Isomap:** LLE ist im k-Fenster zackig (k = 6 schlechter als k = 5); die Demo behauptet deshalb kein "bestes k", sondern zeigt die Kurve.
 - **Rauschen und kleines k** brechen LLE stärker als Isomap; bei drei Faktoren sind beide schwach (LLE liegt beim R² knapp vor Isomap, aber hinter ihm bei Abstandstreue und Trustworthiness) – kein Verfahren gewinnt überall.
 - **Abstände (Text, gemessen nur an dieser Fläche):** LLE erhält Nachbarschaften, keine Entfernungen; weit entfernte Regionen können beliebig gestaucht oder gedehnt sein.
